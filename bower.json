@@ -1,0 +1,13 @@
+{
+  "name": "chatdad",
+  "description": "",
+  "main": "",
+  "authors": [
+    "yildiztolgaa <yildiztolgaa@gmail.com>"
+  ],
+  "license": "MIT",
+  "homepage": "https://github.com/tolgayildizz/chatdad",
+  "dependencies": {
+    "angular": "^1.7.7"
+  }
+}
