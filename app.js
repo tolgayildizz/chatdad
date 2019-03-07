@@ -6,12 +6,24 @@ const logger = require('morgan');
 
 const indexRouter = require('./routes/index');
 const auth = require('./routes/auth');
+const chat = require('./routes/chat');
 
 const app = express();
+
+//Session İşlemleri
+
+const session = require('express-session');
+app.use(session({
+  secret: process.env.SESSION_SECRET_KEY,
+  resave: false,
+  saveUninitialized: true,
+  cookie: { secure: false, maxAge: 14 * 24 * 3600000 } //Secure : true sadece ssl seritifkasında çalışır
+}));
 
 //Passport servisinin kullanımı
 const passport = require('passport');
 app.use(passport.initialize());
+app.use(passport.session());
 
 //Dotenv Kullanımı
 
@@ -21,6 +33,10 @@ dotenv.config();
 //Veritabanının alınması
 
 const db = require('./helpers/db')();
+
+//Middleware Tanımlamaları
+
+const isAuthenticated = require('./middleware/isAuthenticated');
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -35,6 +51,7 @@ app.use(express.static(path.join(__dirname, 'bower_components')));
 
 app.use('/', indexRouter);
 app.use('/auth', auth);
+app.use('/chat', isAuthenticated, chat);
 
 // catch 404 and forward to error handler
 app.use((req, res, next) => {
