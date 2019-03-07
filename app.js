@@ -10,10 +10,15 @@ const chat = require('./routes/chat');
 
 const app = express();
 
+//Redisin dahil edilmesi
+
+const redisStore = require('./helpers/redisStore');
+
 //Session İşlemleri
 
 const session = require('express-session');
 app.use(session({
+  store:redisStore,
   secret: process.env.SESSION_SECRET_KEY,
   resave: false,
   saveUninitialized: true,
