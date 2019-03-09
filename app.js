@@ -7,6 +7,7 @@ const logger = require('morgan');
 const indexRouter = require('./routes/index');
 const auth = require('./routes/auth');
 const chat = require('./routes/chat');
+const messages = require('./routes/messages');
 
 const app = express();
 
@@ -57,6 +58,7 @@ app.use(express.static(path.join(__dirname, 'bower_components')));
 app.use('/', indexRouter);
 app.use('/auth', auth);
 app.use('/chat', isAuthenticated, chat);
+app.use('/messages',isAuthenticated, messages);
 
 // catch 404 and forward to error handler
 app.use((req, res, next) => {

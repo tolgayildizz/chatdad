@@ -1,4 +1,5 @@
 const redisClient = require('../redisClient');
+const _ = require('lodash');
 const shortid = require('shortid');
 //Redis bağlantısı
 function Messages() {
@@ -27,20 +28,20 @@ Messages.prototype.upsert = function ({roomId, message, username, surname}) {
 };
 
 
-// //Online kullanıcıların listelenmesi
-// Rooms.prototype.list = function (callback) {
-// 	let roomList = [];
+//Mesajların listelenmesi
+Messages.prototype.list = function (roomId, callback) {
+	let messageList = [];
 
-// 	this.client.hgetall('rooms', function (err, rooms) {
-// 		if (err) {
-// 		  console.error(err);
-// 		  return callback([]);
-// 		}
+	this.client.hgetall('messages:'+roomId, function (err, messages) {
+		if (err) {
+		  console.error(err);
+		  return callback([]);
+		}
 
-// 		for (let room in rooms){
-// 			roomList.push(JSON.parse(rooms[room]));
-// 		}
+		for (let message in messages){
+			messageList.push(JSON.parse(messages[message]));
+		}
 
-// 		return callback(roomList);
-// 	})
-// };
+		return callback(_.orderBy(messageList,'when','asc'));
+	})
+};
